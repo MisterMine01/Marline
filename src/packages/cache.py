@@ -13,8 +13,11 @@ class Cache:
             self.data = json.load(open(file_path))
         else:
             self.data = {}
+        self.save()
 
     def get(self, key: str) -> Any:
+        if key not in self.data:
+            return None
         return self.data[key]
 
     def set(self, key: str, value: Any) -> None:

@@ -28,7 +28,7 @@ class Client:
         self.variables = data["variables"]
         self.variables = {key: self.set_variable(value)
                           for key, value in self.variables.items()}
-        self.socket.send(json.dumps({"command": "return_variables",
+        self.socket.send(json.dumps({"command": "Marline.return_variables",
                                      "variables": self.variables}).encode())
         data = json.loads(self.recv().decode())
         if not data["ok"]:

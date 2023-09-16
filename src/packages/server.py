@@ -18,9 +18,10 @@ class Client:
         self.address = address
 
     def send(self, data: bytes) -> None:
+        logging.debug(f"Sending {data} to {self.address[0]}:{self.address[1]}")
         self.socket.send(data)
 
-    def receive(self, size: int) -> bytes:
+    def receive(self, size: int = 4096) -> bytes:
         return self.socket.recv(size)
 
     def close(self) -> None:
@@ -37,8 +38,10 @@ class Server:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.bind(('', self.port))
         self.thread = []
+        logging.info(f"Server started on port {self.port}")
 
     def listen(self, callback: Callable[[Client], None]) -> None:
+        logging.info("Listening for connections...")
         while True:
             self.socket.listen(5)
             client, address = self.socket.accept()

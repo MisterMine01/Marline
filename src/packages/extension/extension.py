@@ -3,6 +3,7 @@ from ..cache import Cache
 from ..config import Config
 from typing import Callable
 from ..server import Client
+import logging
 
 
 class Extension(ABC):
@@ -21,6 +22,7 @@ class Extension(ABC):
         self.config = config
         self.extension_name = extensions_name
         self.variables = {}
+        logging.info(f"Loaded extension {extensions_name}")
 
     def launch(self, command: str, client: Client, parameters) -> dict:
         """Launch a command."""

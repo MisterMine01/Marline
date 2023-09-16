@@ -14,7 +14,8 @@ class Config(dict[str, Any]):
             super().__init__(json.load(open(config_file)))
         else:
             super().__init__()
+        self.save()
 
     def save(self) -> None:
         with open(self.file, "w") as f:
-            f.write(json.dumps(self.data, indent=4))
+            f.write(json.dumps(self, indent=4))

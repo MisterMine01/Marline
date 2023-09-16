@@ -20,8 +20,7 @@ class Main:
         self.server = Server(self.config["port"])
         self.cache = Cache(self.config["cache_file"])
         os.makedirs(self.config["config_folder"], exist_ok=True)
-        self.extensions = generate_extensions(self.config["extensions_folder"],
-                                              self.config)
+        self.extensions = generate_extensions(self.config["extensions_folder"], self.cache, self.config["config_folder"])
 
     def run(self) -> None:
         self.server.listen(self.handle)
@@ -30,14 +29,14 @@ class Main:
         command = data["command"].split(".")[1]
         match command:
             case "connection":
-                function.client_function(data, client)
+                function.client_function(data, client, self.extensions)
             case "return_variables":
                 function.variable_function(data, client)
 
     def handle(self, client: Client) -> None:
         stop = False
         while not stop:
-            data = client.recv(4096)
+            data = client.receive()
             if not data:
                 stop = True
                 break

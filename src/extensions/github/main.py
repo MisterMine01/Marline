@@ -13,17 +13,16 @@ class Github(Extension):
     cache_data: dict
     cache_name: str = "github"
 
-    variables = {
-        "url": "${GITHUB_SERVER_URL}${GITHUB_REPOSITORY}.git",
-        "name": "${GITHUB_REPOSITORY_ID}",
-        "branch": "${GITHUB_BASE_REF}"
-    }
-
     def __init__(self, cache: Cache, config: Config) -> None:
-        super().__init__(cache, config)
+        super().__init__(cache, config, self.cache_name)
         self.cache_data = self.cache.get(self.cache_name) or {}
         self.command = {
             "update": self.github,
+        }
+        self.variables = {
+            "url": "${GITHUB_SERVER_URL}${GITHUB_REPOSITORY}.git",
+            "name": "${GITHUB_REPOSITORY_ID}",
+            "branch": "${GITHUB_BASE_REF}"
         }
 
     def github(self, client: Client, parameters: dict) -> dict:

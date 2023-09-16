@@ -9,7 +9,7 @@ from ..server import Client
 
 
 def generate_extensions(extension_folder: str,
-                        cache: Cache, cache_folder: str) \
+                        cache: Cache, config_folder: str) \
         -> dict[str, Extension]:
     """Generate extensions from a folder."""
     extensions = {}
@@ -32,7 +32,7 @@ def generate_extensions(extension_folder: str,
         extension = extension["__extension__"]
         extension_name = extension["name"]
         extension_class = extension["class"]
-        config_file = os.path.join(cache_folder, extension_name + ".json")
+        config_file = os.path.join(config_folder, extension_name + ".json")
         config = Config(config_file)
         extensions[extension_name] = extension_class(cache, config)
     return extensions
