@@ -1,5 +1,9 @@
-from .server import Server
+from .server import Server, Client
 from socket import socket as Socket
+from .cache import Cache
 from .logger import setup_log
+from .extension import Extension
+from .config import Config
 
-__all__ = ["Server", "setup_log", "Socket"]
+__all__ = ["Server", "setup_log", "Socket", "Cache",
+           "Extension", "Config", "Client"]
