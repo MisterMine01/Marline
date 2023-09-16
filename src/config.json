@@ -1,0 +1,7 @@
+{
+    "port": 4468,
+    "repository_path": "repository",
+    "log_folder": "./logs",
+    "cache_path": "cache.json",
+    "admin_password": "admin"
+}
