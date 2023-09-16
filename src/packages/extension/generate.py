@@ -1,5 +1,6 @@
 import os
 import runpy
+from typing import Any
 
 from .extension import Extension
 from ..cache import Cache
@@ -7,7 +8,8 @@ from ..config import Config
 from ..server import Client
 
 
-def generate_extensions(extension_folder, config: Config) \
+def generate_extensions(extension_folder: str,
+                        cache: Cache, cache_folder: str) \
         -> dict[str, Extension]:
     """Generate extensions from a folder."""
     extensions = {}
@@ -15,7 +17,7 @@ def generate_extensions(extension_folder, config: Config) \
         if os.path.isdir(os.path.join(extension_folder, extension)):
             extension_file = os.path.join(extension_folder, extension,
                                           "main.py")
-        if os.path.isfile(extension_file):
+        if os.path.isfile(os.path.join(extension_folder, extension)):
             extension_file = os.path.join(extension_folder, extension_file)
         extension = runpy.run_path(
             extension_file,
@@ -30,7 +32,7 @@ def generate_extensions(extension_folder, config: Config) \
         extension = extension["__extension__"]
         extension_name = extension["name"]
         extension_class = extension["class"]
-        cache_path = os.path.join(config["cache_folder"], extension_name)
-        cache = Cache(cache_path)
+        config_file = os.path.join(cache_folder, extension_name + ".json")
+        config = Config(config_file)
         extensions[extension_name] = extension_class(cache, config)
     return extensions

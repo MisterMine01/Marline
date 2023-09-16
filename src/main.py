@@ -19,7 +19,7 @@ class Main:
         setup_log(self.config["log_folder"])
         self.server = Server(self.config["port"])
         self.cache = Cache(self.config["cache_file"])
-        os.makedirs(self.config["config_folder"])
+        os.makedirs(self.config["config_folder"], exist_ok=True)
         self.extensions = generate_extensions(self.config["extensions_folder"],
                                               self.config)
 
