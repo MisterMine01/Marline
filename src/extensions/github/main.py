@@ -26,12 +26,12 @@ class Github(Extension):
             "update": self.github,
         }
 
-    def github(self, client: Client) -> dict:
+    def github(self, client: Client, parameters: dict) -> dict:
         """Update repository."""
         name = client.variables["github.name"]
         branch = client.variables["github.branch"]
         result = self.git(name, branch)
-        if not result["ok"]:
+        if not result["ok"] and result["use"] == "start_git":
             result = self.start_git(name, client.variables["github.url"],
                                     branch)
             if not result["ok"]:

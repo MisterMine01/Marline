@@ -3,6 +3,10 @@ from typing import Callable, Any
 import threading
 import logging
 
+CLIENT_AUTHORIZED = [
+    "0.0.1"
+]
+
 
 class Client:
     socket: socket.socket

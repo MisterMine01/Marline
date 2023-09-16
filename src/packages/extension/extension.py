@@ -13,7 +13,7 @@ class Extension(ABC):
     extension_name: str
     variables: dict[str, str]
 
-    command: dict[str, Callable[[Client], dict]]
+    command: dict[str, Callable[[Client, dict], dict]]
 
     def __init__(self, cache: Cache, config: Config,
                  extensions_name: str) -> None:
@@ -21,3 +21,10 @@ class Extension(ABC):
         self.config = config
         self.extension_name = extensions_name
         self.variables = {}
+
+    def launch(self, command: str, client: Client, parameters) -> dict:
+        """Launch a command."""
+        if command in self.command:
+            return self.command[command](client, parameters)
+        else:
+            return {"ok": False, "error": "command not found"}
