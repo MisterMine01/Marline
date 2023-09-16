@@ -25,7 +25,7 @@ class Github(Extension):
             "branch": "${GITHUB_BASE_REF}"
         }
 
-    def github(self, client: Client, parameters: dict) -> dict:
+    def github(self, client: Client, parameters: list) -> dict:
         """Update repository."""
         name = client.variables["github.name"]
         branch = client.variables["github.branch"]

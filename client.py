@@ -57,6 +57,10 @@ class Client:
 
 
 if __name__ == "__main__":
-    json_config = json.load(open("src/config.json"))
-    client = Client("localhost", json_config["port"])
-    print(client.variables)
+    port: int = 4469
+    client = Client("127.0.0.1", port)
+    try:
+        repo_config = json.load(open("marline.json"))
+    except FileNotFoundError:
+        raise Exception("marline.json not found")
+    

@@ -2,7 +2,6 @@ from packages import setup_log, Server, Cache, Extension, Client, \
      generate_extensions
 import packages.function as function
 import json
-import logging
 from typing import Any
 import os
 
@@ -20,7 +19,9 @@ class Main:
         self.server = Server(self.config["port"])
         self.cache = Cache(self.config["cache_file"])
         os.makedirs(self.config["config_folder"], exist_ok=True)
-        self.extensions = generate_extensions(self.config["extensions_folder"], self.cache, self.config["config_folder"])
+        self.extensions = generate_extensions(self.config["extensions_folder"],
+                                              self.cache,
+                                              self.config["config_folder"])
 
     def run(self) -> None:
         self.server.listen(self.handle)
@@ -32,6 +33,19 @@ class Main:
                 function.client_function(data, client, self.extensions)
             case "return_variables":
                 function.variable_function(data, client)
+
+    def handle_command(self, client: Client, data: dict) -> None:
+        extension = data["command"].split(".")[0]
+        command = data["command"].split(".")[1]
+        parameters = data["parameters"]
+        if extension not in self.extensions:
+            client.send(json.dumps({"ok": False,
+                                    "error": "extension not found"}).encode())
+        if command in self.extensions[extension].command:
+            self.extensions[extension].command[command](client, parameters)
+        else:
+            client.send(json.dumps({"ok": False,
+                                    "error": "command not found"}).encode())
 
     def handle(self, client: Client) -> None:
         stop = False
